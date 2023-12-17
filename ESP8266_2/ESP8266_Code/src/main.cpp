@@ -97,7 +97,7 @@ char keys[rows][columns] =
         {'7', '8', '9'},
         {'*', '0', '#'}};
 
-byte rowPins[rows] = {0, 14, 12, 13}; // nối chân esp8266
+byte rowPins[rows] = {2, 14, 12, 13}; // nối chân esp8266
 byte columnPins[columns] = {15, 3, 1};
 
 // cài đặt thư viện keypad
@@ -139,6 +139,7 @@ void setup_wifi()
 
 int tinhieumocua = 0;
 int tinhieudoimatkhau = 0;
+int tinhieubaochay = 0;
 int cuadangmo = 0;
 void callback(char *topic, byte *payload, unsigned int length)
 {
@@ -173,6 +174,21 @@ void callback(char *topic, byte *payload, unsigned int length)
     }
     tinhieudoimatkhau = 1;
   }
+  else if (strcmp(topic, "led-kitchen") == 0) // Check topic "LedBedRoom"m
+    {
+      Serial.print("Message arrived [");
+      Serial.print(topic);
+      Serial.print("] ");
+      for (int i = 0; i < length; i++)
+      {
+        Serial.print((char)payload[i]);
+      }
+      Serial.println();
+      if ((char)payload[0] == '2')
+      {
+        tinhieubaochay =1 ;
+      }
+    }
 }
 
 void reconnect()
@@ -190,6 +206,7 @@ void reconnect()
       Serial.println("connected");
 
       client.subscribe("door-living-room");
+      client.subscribe("led-kitchen");
       client.subscribe("newpassword");
     }
     else
@@ -205,7 +222,7 @@ void reconnect()
 void setup()
 {
   Serial.begin(115200); // bật serial, baudrate 9600
-  myServo.attach(2);    // Khai báo chân điều khiển động cơ
+  myServo.attach(0);    // Khai báo chân điều khiển động cơ
   myServo.write(0);
   lcd.init(); // Khai báo sử dụng LCD
   lcd.begin(16, 2);
@@ -357,6 +374,16 @@ void loop()
   if (tinhieumocua == 1 && cuadangmo == 0)
   {
     for (int i = 0; i <= 180; i++)
+    {
+      myServo.write(i); // Mở cửa
+      delay(15);
+      cuadangmo = 1;
+    }
+    tinhieumocua = 0;
+  }
+  if(tinhieubaochay == 1 && cuadangmo == 0)
+  {
+        for (int i = 0; i <= 180; i++)
     {
       myServo.write(i); // Mở cửa
       delay(15);
