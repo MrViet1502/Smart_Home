@@ -4,7 +4,7 @@ Mô hình sử dụng 2 esp8266. Mỗi esp8266 được cấu hình riêng phụ
 
 Mô hình sử dụng công nghệ MQTT và Firebase để điều khiển thiết bị nhằm nhận được thời gian phản hồi nhanh nhất.
 
-Code được nằm trong ESP866_1 và ESP8266_2. 
+Code được nằm trong ESP866_1_BEDROOM_KITCHEN (do lỗi upload nên file code được upload dưới dạng .zip) và ESP8266_2. 
 
 Code giao diện web nằm trong folder Firebase.
 
